@@ -16,8 +16,7 @@
       ]
     },
     "plugins": [
-      "expo-dev-client",
-      "@notifee/react-native"
+      "expo-dev-client"
     ]
   }
 }
