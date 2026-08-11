@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Task } from '../types/Task';
+import { getTaskType } from '../data/taskTypes';
 
 interface Props {
   task: Task;
@@ -9,11 +10,13 @@ interface Props {
 }
 
 export default function TaskItem({ task, onToggle, onDelete }: Props) {
+  const type = getTaskType(task.taskTypeId);
+
   return (
     <View style={styles.row}>
       <Pressable
         onPress={() => onToggle(task.id)}
-        style={[styles.checkbox, task.completed && styles.checkboxChecked]}
+        style={[styles.checkbox, { borderColor: type.color }, task.completed && { backgroundColor: type.color }]}
         hitSlop={8}
       >
         {task.completed && <View style={styles.checkboxDot} />}
@@ -23,6 +26,17 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
         <Text style={[styles.title, task.completed && styles.titleDone]} numberOfLines={2}>
           {task.title}
         </Text>
+        <View style={styles.metaRow}>
+          <View style={[styles.badge, { backgroundColor: type.color + '22' }]}>
+            <Text style={[styles.badgeText, { color: type.color }]}>{type.label}</Text>
+          </View>
+          {task.reminderTimes.length > 0 && (
+            <Text style={styles.reminderCount}>
+              {task.reminderTimes.length}× reminder{task.reminderTimes.length > 1 ? 's' : ''}/day
+              {task.audioEnabled ? ' 🔊' : ''}
+            </Text>
+          )}
+        </View>
         {!!task.notes && (
           <Text style={styles.notes} numberOfLines={1}>
             {task.notes}
@@ -37,12 +51,10 @@ export default function TaskItem({ task, onToggle, onDelete }: Props) {
   );
 }
 
-const ACCENT = '#5B6CFF';
-
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingVertical: 12,
     paddingHorizontal: 16,
     backgroundColor: '#FFFFFF',
@@ -59,13 +71,10 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: ACCENT,
     marginRight: 12,
+    marginTop: 2,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  checkboxChecked: {
-    backgroundColor: ACCENT,
   },
   checkboxDot: {
     width: 8,
@@ -84,6 +93,25 @@ const styles = StyleSheet.create({
   titleDone: {
     color: '#A0A0B2',
     textDecorationLine: 'line-through',
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    gap: 8,
+  },
+  badge: {
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  reminderCount: {
+    fontSize: 12,
+    color: '#8A8AA3',
   },
   notes: {
     fontSize: 13,

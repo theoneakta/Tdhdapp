@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "tdhd",
+    "slug": "tdhd",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.theoneakta.tdhd",
+      "permissions": [
+        "SCHEDULE_EXACT_ALARM",
+        "USE_EXACT_ALARM",
+        "POST_NOTIFICATIONS",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED"
+      ]
+    },
+    "plugins": [
+      "expo-dev-client",
+      "@notifee/react-native"
+    ]
+  }
+}
